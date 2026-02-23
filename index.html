@@ -8,13 +8,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; color: #333; 
-    background-image: url('fundo.jpg'); /* Substitua pelo link ou nome do arquivo */
-    background-size: cover;                /* Faz a imagem cobrir toda a tela */
+    background-image: url('fundoapp.png'); /* Substitua pelo link ou nome do arquivo */
+    background-size: auto;                /* Faz a imagem cobrir toda a tela */
     background-position: center;           /* Centraliza a imagem */
     background-attachment: fixed;          /* Mantém o fundo parado ao rolar a página */
     background-repeat: no-repeat;          /* Impede que a imagem se repita */
 }
-        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; text-align: center; }
+        .container { background: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; text-align: center; backdrop-filter: blur(5px);
+      }
         .hidden { display: none; }
         h1 { color: #1a73e8; margin-bottom: 10px; }
         p.intro-text { line-height: 1.6; color: #555; margin-bottom: 30px; text-align: justify; }
@@ -28,13 +29,22 @@
         .result-summary h3 { margin-top: 0; color: #1a73e8; }
         .gift-desc { margin-bottom: 12px; font-size: 14px; line-height: 1.4; }
         /* Estilo para a captura da imagem */
-        #capture-area { padding: 20px; background: white; border-radius: 10px; }
+        #capture-area { 
+            padding: 40px; 
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+            border: 1px solid #d1e3f8;
+            text-align: left;
+        }
+        #capture-area h1 { color: #1a73e8; text-align: center; margin-bottom: 5px; }
+        .user-info { text-align: center; margin-bottom: 20px; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="start-section">
+        <img src="logo.png" alt="Logo" width="100">
         <h1>Teste de Dons APEPM</h1>
         <p class="intro-text">
             Este teste ajuda a identificar suas inclinações naturais com base em Efésios. Responda com sinceridade o quanto cada afirmação descreve você hoje.
@@ -42,10 +52,17 @@
             <strong>Escala de Respostas:</strong>
             <br>• 0: Nunca | • 1: Raramente | • 2: Às Vezes | • 3: Sempre
         </p>
+        <p class="intro-text">Insira seu nome para começar o teste:
+        <input type="text" id="user-name" placeholder="Seu nome">
+        </p>
         <button class="btn" onclick="startQuiz()">Começar Teste</button>
+       <img src="logodistrito.png" alt="Logo" width="300">
     </div>
 
     <div id="quiz-section" class="hidden">
+        <div style="display: flex; justify-content: left; align-items: left;">
+        <img src="logo.png" alt="Logo" width="50">
+      </div>
         <div class="progress">Afirmação <span id="current-idx">1</span> de 25</div>
         <div class="question-box"><h2 id="question-text"></h2></div>
         <div id="options">
@@ -53,21 +70,60 @@
             <button class="btn" onclick="nextQuestion(1)">1 - Raramente</button>
             <button class="btn" onclick="nextQuestion(2)">2 - Às vezes</button>
             <button class="btn" onclick="nextQuestion(3)">3 - Sempre</button>
-        </div>
+         <img src="logodistrito.png" alt="Logo" width="250"> 
+      </div>
     </div>
 
     <div id="result-section" class="hidden">
         <div id="capture-area">
             <h1>Meu Perfil APEPM</h1>
-            <canvas id="myChart" style="margin-bottom: 20px;"></canvas>
-            
+            <div class="user-info">
+                <strong>Nome:</strong> <span id="display-name"></span> | 
+                <strong>Data:</strong> <span id="display-date"></span>
+            </div>
+            <canvas id="myChart" style="margin-bottom: 20px;"></canvas> 
             <div class="result-summary">
-                <h3>Resumo das Áreas:</h3>
-                [cite_start]<div class="gift-desc"><strong>Apóstolos:</strong> Visionários que iniciam projetos e trazem inovação [cite: 8-12].</div>
-                [cite_start]<div class="gift-desc"><strong>Profetas:</strong> Valorizam a verdade, justiça e discernimento [cite: 18-21].</div>
-                [cite_start]<div class="gift-desc"><strong>Evangelistas:</strong> Comunicadores entusiastas e influenciadores [cite: 24-27].</div>
-                [cite_start]<div class="gift-desc"><strong>Pastores:</strong> Provedores de cuidado, escuta e acolhimento [cite: 28-35].</div>
-                [cite_start]<div class="gift-desc"><strong>Mestres:</strong> Dedicados ao ensino e à resolução eficaz [cite: 39-43].</div>
+                <h3>Resumo das áreas relacionando os dons de Efésios 4:11 com as listas de Romanos 12 e 1 Coríntios 12.</h3>
+                <div class="gift-desc"><strong>Apóstolos (Visioário)</strong> Visionários que iniciam projetos e trazem inovação.
+                  <p>
+                  <ul>
+                  <li><strong>Dons Relacionados:</strong> Liderança, Administração, Fé (para crer em projetos impossíveis).</li>
+                  <li><strong>Papel:</strong> É quem planta a semente de algo novo e organiza a estrutura para que outros trabalhem.</li>
+                  </ul>
+                  </p>
+          </div>
+                <div class="gift-desc"><strong>Profetas (Discernidor)</strong> Valorizam a verdade, justiça e discernimento.
+                   <p>
+                  <ul>
+                  <li><strong>Dons Relacionados:</strong>Profecia, Discernimento de Espíritos, Palavra de Sabedoria.</li>
+                  <li><strong>Papel:</strong>É quem traz o prumo ético e espiritual, denunciando o que está errado e confirmando o caminho certo.</li>
+                  </ul>
+                  </p>
+          </div>
+                <div class="gift-desc"><strong>Evangelistas (Mobilizador)</strong> Comunicadores entusiastas e influenciadores.
+                   <p>
+                  <ul>
+                  <li><strong>Dons Relacionados:</strong>  Exortação (no sentido de encorajar e persuadir), Fé, Milagres e Curas.</li>
+                  <li><strong>Papel:</strong> É o que contagia os outros com a mensagem e os motiva à ação.</li>
+                  </ul>
+                  </p>
+      </div>
+                <div class="gift-desc"><strong>Pastores (Cuidador)</strong> Provedores de cuidado, escuta e acolhimento.
+                   <p>
+                  <ul>
+                  <li><strong>Dons Relacionados:</strong> Misericórdia (empatia profunda), Serviço, Socorro, Hospitalidade, Exortação (no sentido de consolo e aconselhamento).</li>
+                  <li><strong>Papel:</strong> É quem garante que ninguém se sinta sozinho ou abandonado no processo.</li>
+                  </ul>
+                  </p>
+  </div>
+                <div class="gift-desc"><strong>Mestres (Instrutor)</strong> Dedicados ao ensino e à resolução eficaz.
+                   <p>
+                  <ul>
+                  <li><strong>Dons Relacionados:</strong> Ensino, Palavra de Conhecimento (estudo da Escritura), Sabedoria(aplicação prática do saber).</li>
+                  <li><strong>Papel:</strong> É quem organiza a informação para que ela seja útil e fácil de entender, evitando confusões doutrinárias.</li>
+                  </ul>
+                  </p>
+  </div>
             </div>
         </div>
         
@@ -109,6 +165,11 @@
     let scores = { "Apóstolos": 0, "Profetas": 0, "Evangelistas": 0, "Pastores": 0, "Mestres": 0 };
 
     function startQuiz() {
+        const name = document.getElementById('user-name').value;
+        if (!name) { alert("Por favor, digite seu nome."); return; }
+        
+        document.getElementById('display-name').innerText = name;
+        document.getElementById('display-date').innerText = new Date().toLocaleDateString('pt-BR');
         document.getElementById('start-section').classList.add('hidden');
         document.getElementById('quiz-section').classList.remove('hidden');
         showQuestion();
@@ -151,9 +212,9 @@
 
     function downloadImage() {
         const area = document.getElementById('capture-area');
-        html2canvas(area).then(canvas => {
+        html2canvas(area, { scale: 2 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'meu-resultado-apepm.png';
+            link.download = `Resultado_APEPM_${document.getElementById('display-name').innerText}.png`;
             link.href = canvas.toDataURL();
             link.click();
         });
