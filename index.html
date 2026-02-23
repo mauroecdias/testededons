@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Dons APEPM</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; color: #333; 
+    background-image: url('fundo.jpg'); /* Substitua pelo link ou nome do arquivo */
+    background-size: cover;                /* Faz a imagem cobrir toda a tela */
+    background-position: center;           /* Centraliza a imagem */
+    background-attachment: fixed;          /* Mantém o fundo parado ao rolar a página */
+    background-repeat: no-repeat;          /* Impede que a imagem se repita */
+}
+        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; text-align: center; }
+        .hidden { display: none; }
+        h1 { color: #1a73e8; margin-bottom: 10px; }
+        p.intro-text { line-height: 1.6; color: #555; margin-bottom: 30px; text-align: justify; }
+        .btn { background: #1a73e8; color: white; border: none; padding: 15px 25px; border-radius: 8px; cursor: pointer; margin: 8px 0; font-size: 16px; width: 100%; transition: 0.3s; }
+        .btn:hover { background: #1557b0; }
+        .btn-download { background: #34a853; font-weight: bold; margin-top: 15px; }
+        .btn-download:hover { background: #2d8a46; }
+        .progress { margin-bottom: 25px; font-weight: bold; color: #1a73e8; }
+        .question-box h2 { font-size: 20px; margin-bottom: 30px; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+        .result-summary { text-align: left; margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 10px; }
+        .result-summary h3 { margin-top: 0; color: #1a73e8; }
+        .gift-desc { margin-bottom: 12px; font-size: 14px; line-height: 1.4; }
+        /* Estilo para a captura da imagem */
+        #capture-area { padding: 20px; background: white; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="start-section">
+        <h1>Teste de Dons APEPM</h1>
+        <p class="intro-text">
+            Este teste ajuda a identificar suas inclinações naturais com base em Efésios. Responda com sinceridade o quanto cada afirmação descreve você hoje.
+            <br><br>
+            <strong>Escala de Respostas:</strong>
+            <br>• 0: Nunca | • 1: Raramente | • 2: Às Vezes | • 3: Sempre
+        </p>
+        <button class="btn" onclick="startQuiz()">Começar Teste</button>
+    </div>
+
+    <div id="quiz-section" class="hidden">
+        <div class="progress">Afirmação <span id="current-idx">1</span> de 25</div>
+        <div class="question-box"><h2 id="question-text"></h2></div>
+        <div id="options">
+            <button class="btn" onclick="nextQuestion(0)">0 - Nunca</button>
+            <button class="btn" onclick="nextQuestion(1)">1 - Raramente</button>
+            <button class="btn" onclick="nextQuestion(2)">2 - Às vezes</button>
+            <button class="btn" onclick="nextQuestion(3)">3 - Sempre</button>
+        </div>
+    </div>
+
+    <div id="result-section" class="hidden">
+        <div id="capture-area">
+            <h1>Meu Perfil APEPM</h1>
+            <canvas id="myChart" style="margin-bottom: 20px;"></canvas>
+            
+            <div class="result-summary">
+                <h3>Resumo das Áreas:</h3>
+                [cite_start]<div class="gift-desc"><strong>Apóstolos:</strong> Visionários que iniciam projetos e trazem inovação [cite: 8-12].</div>
+                [cite_start]<div class="gift-desc"><strong>Profetas:</strong> Valorizam a verdade, justiça e discernimento [cite: 18-21].</div>
+                [cite_start]<div class="gift-desc"><strong>Evangelistas:</strong> Comunicadores entusiastas e influenciadores [cite: 24-27].</div>
+                [cite_start]<div class="gift-desc"><strong>Pastores:</strong> Provedores de cuidado, escuta e acolhimento [cite: 28-35].</div>
+                [cite_start]<div class="gift-desc"><strong>Mestres:</strong> Dedicados ao ensino e à resolução eficaz [cite: 39-43].</div>
+            </div>
+        </div>
+        
+        <button class="btn btn-download" onclick="downloadImage()">Baixar Meu Resultado (PNG)</button>
+        <button class="btn" style="background: #666;" onclick="location.reload()">Refazer Teste</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { t: "Nos ambientes que frequento contribuo com ideias originais e inovadoras.", cat: "Apóstolos" },
+        { t: "Sou eficiente em clarificar metas, desenvolver estratégias e dar visão.", cat: "Apóstolos" },
+        { t: "Gosto de mudanças, mesmo aquelas que trazem incômodo aos demais.", cat: "Apóstolos" },
+        { t: "Tenho vontade de iniciar um negócio ou organização do zero.", cat: "Apóstolos" },
+        { t: "As pessoas me descrevem como empreendedor.", cat: "Apóstolos" },
+        { t: "Posso avaliar com precisão as pessoas com base em primeiras impressões.", cat: "Profetas" },
+        { t: "Justiça social e ajudar os pobres e marginalizados significa muito para mim.", cat: "Profetas" },
+        { t: "Fico frustrado pela falta de fé e compreensão nos que estão ao redor.", cat: "Profetas" },
+        { t: "Gosto de falar a verdade e confrontar mesmo que provoque incômodo.", cat: "Profetas" },
+        { t: "Tenho prazer em ficar só por longos períodos para pensar e refletir.", cat: "Profetas" },
+        { t: "Quando estou apaixonado por algo, levo outros a se apaixonarem também.", cat: "Evangelistas" },
+        { t: "Pessoas com diferentes valores dizem que se sentem bem comigo.", cat: "Evangelistas" },
+        { t: "Eu gosto de contar histórias, especialmente as minhas.", cat: "Evangelistas" },
+        { t: "Tenho prazer em falar para os outros no que acredito.", cat: "Evangelistas" },
+        { t: "Por vezes, em meu entusiasmo, acabo forçando meus pontos de vista.", cat: "Evangelistas" },
+        { t: "Sou bom em escutar e compreender o que as pessoas dizem.", cat: "Pastores" },
+        { t: "Tenho facilidade em lembrar nomes ou o lugar em que conheci alguém.", cat: "Pastores" },
+        { t: "Gosto de prover um ambiente seguro, acolhedor e cuidado.", cat: "Pastores" },
+        { t: "Sou fiel em prover apoio e atenção por longos períodos.", cat: "Pastores" },
+        { t: "Me identifico com aqueles que estão sofrendo ou angustiados.", cat: "Pastores" },
+        { t: "As pessoas dizem que sou bom ao apresentar informações e ideias.", cat: "Mestres" },
+        { t: "Explico conceitos difíceis de formas diferentes até todos entenderem.", cat: "Mestres" },
+        { t: "Amo ensinar às pessoas como fazer as coisas que gosto.", cat: "Mestres" },
+        { t: "Gosto de tomar nota e prestar atenção aos detalhes do que dizem.", cat: "Mestres" },
+        { t: "Me deleito em encontrar maneiras de resolver as coisas eficazmente.", cat: "Mestres" }
+    ];
+
+    let currentQuestion = 0;
+    let scores = { "Apóstolos": 0, "Profetas": 0, "Evangelistas": 0, "Pastores": 0, "Mestres": 0 };
+
+    function startQuiz() {
+        document.getElementById('start-section').classList.add('hidden');
+        document.getElementById('quiz-section').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        document.getElementById('question-text').innerText = questions[currentQuestion].t;
+        document.getElementById('current-idx').innerText = currentQuestion + 1;
+    }
+
+    function nextQuestion(points) {
+        scores[questions[currentQuestion].cat] += points;
+        currentQuestion++;
+        if (currentQuestion < questions.length) showQuestion();
+        else showResult();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-section').classList.add('hidden');
+        document.getElementById('result-section').classList.remove('hidden');
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const dataValues = Object.values(scores).map(v => Math.round((v / 15) * 100));
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(scores),
+                datasets: [{
+                    label: '% Afinidade',
+                    data: dataValues,
+                    backgroundColor: ['#4285F4', '#EA4335', '#FBBC05', '#34A853', '#9b59b6']
+                }]
+            },
+            options: { 
+                scales: { y: { beginAtZero: true, max: 100 } },
+                animation: { onComplete: function() { window.chartFinished = true; } }
+            }
+        });
+    }
+
+    function downloadImage() {
+        const area = document.getElementById('capture-area');
+        html2canvas(area).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'meu-resultado-apepm.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
+</script>
+</body>
+</html>
