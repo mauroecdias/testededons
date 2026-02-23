@@ -30,14 +30,24 @@
         .gift-desc { margin-bottom: 12px; font-size: 14px; line-height: 1.4; }
         /* Estilo para a captura da imagem */
         #capture-area { 
-            padding: 40px; 
+            padding: 30px; 
             border-radius: 20px;
             background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
             border: 1px solid #d1e3f8;
             text-align: left;
+            width: 95%; /* Ajusta à largura da tela */
+            margin: 0 auto;
+            box-sizing: border-box;
         }
         #capture-area h1 { color: #1a73e8; text-align: center; margin-bottom: 5px; }
-        .user-info { text-align: center; margin-bottom: 20px; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .user-info { margin-bottom: 20px; 
+    color: #555; 
+    font-size: 14px;
+    line-height: 1.6; }
+        #myChart {
+        width: 95% !important;
+        height: 300px !important; /* Altura fixa para manter a legibilidade */
+        }
     </style>
 </head>
 <body>
@@ -82,8 +92,9 @@
                 <strong>Data:</strong> <span id="display-date"></span>
             </div>
             <canvas id="myChart" style="margin-bottom: 20px;"></canvas> 
-            <div class="result-summary">
-                <h3>Resumo das áreas relacionando os dons de Efésios 4:11 com as listas de Romanos 12 e 1 Coríntios 12.</h3>
+           </div>
+              <div class="result-summary">
+               <h3>Resumo das áreas relacionando os dons de Efésios 4:11 com as listas de Romanos 12 e 1 Coríntios 12.</h3>
                 <div class="gift-desc"><strong>Apóstolos (Visioário)</strong> Visionários que iniciam projetos e trazem inovação.
                   <p>
                   <ul>
@@ -125,7 +136,6 @@
                   </p>
   </div>
             </div>
-        </div>
         
         <button class="btn btn-download" onclick="downloadImage()">Baixar Meu Resultado (PNG)</button>
         <button class="btn" style="background: #666;" onclick="location.reload()">Refazer Teste</button>
@@ -204,7 +214,9 @@
                 }]
             },
             options: { 
-                scales: { y: { beginAtZero: true, max: 100 } },
+              responsive: true,
+    maintainAspectRatio: false,  
+              scales: { y: { beginAtZero: true, max: 100 } },
                 animation: { onComplete: function() { window.chartFinished = true; } }
             }
         });
