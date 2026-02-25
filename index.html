@@ -6,6 +6,8 @@
     <title>Teste de Dons APEPM</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; color: #333; 
     background-image: url('fundoapp.png'); /* Substitua pelo link ou nome do arquivo */
@@ -66,7 +68,7 @@
         <input type="text" id="user-name" placeholder="Seu nome">
         </p>
         <button class="btn" onclick="startQuiz()">Começar Teste</button>
-       <img src="logodistrito.png" alt="Logo" width="300">
+       
     </div>
 
     <div id="quiz-section" class="hidden">
@@ -80,7 +82,7 @@
             <button class="btn" onclick="nextQuestion(1)">1 - Raramente</button>
             <button class="btn" onclick="nextQuestion(2)">2 - Às vezes</button>
             <button class="btn" onclick="nextQuestion(3)">3 - Sempre</button>
-         <img src="logodistrito.png" alt="Logo" width="250"> 
+         
       </div>
     </div>
 
@@ -205,6 +207,7 @@
 
         new Chart(ctx, {
             type: 'bar',
+            plugins: [ChartDataLabels], // ATIVA O PLUGIN AQUI
             data: {
                 labels: Object.keys(scores),
                 datasets: [{
@@ -216,8 +219,18 @@
             options: { 
               responsive: true,
     maintainAspectRatio: false,  
-              scales: { y: { beginAtZero: true, max: 100 } },
-                animation: { onComplete: function() { window.chartFinished = true; } }
+              scales: { y: { beginAtZero: true, max: 110 } },
+              plugins: {
+                legend: { display: false },
+                datalabels: { // CONFIGURAÇÃO DOS NÚMEROS
+                    anchor: 'end', // Posiciona no fim da barra
+                    align: 'top',  // Alinha acima da barra
+                    formatter: (value) => value + '%', // Adiciona o %
+                    font: { weight: 'bold', size: 14 },
+                    color: '#444'
+                }
+              },
+              animation: { onComplete: function() { window.chartFinished = true; } }
             }
         });
     }
